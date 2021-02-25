@@ -13,17 +13,22 @@ const managerQuestions = [
     {
         type: "input",
         name: "manager_name",
-        message: "Enter manager name:"
+        message: "What is the manager's name?"
+    },
+    {
+        type: "input",
+        name: "manager_id",
+        message: "What is the manager's id?"
     },
     {
         type: "input",
         name: "manager_email",
-        message: "Enter manager's email:"
+        message: "What is the manager's email?"
     },
     {
         type: "input",
         name: "manager_officeNum",
-        message: "Enter office number:",
+        message: "What is the manager's office number?",
     }
 ];
 const engineerQuestions = [
@@ -81,7 +86,7 @@ const newTeamMember = [
 
 inquirer.prompt(managerQuestions).then(ans => {
     console.log(ans);
-    teamList.push(new Manager(ans.man))
+    teamList.push(new Manager(ans.manager_name, ans.manager_id))
 })
 
 // After the user has input all employees desired, call the `render` function (required
