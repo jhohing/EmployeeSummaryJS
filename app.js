@@ -136,7 +136,9 @@ const createHTML = () => {
 
     const outputPath = path.join(__dirname, dir, "team.html");
 
-    fs.writeFile(outputPath, render(teamMembers), "utf-8");
+    fs.writeFile(outputPath, render(teamMembers), function (err) {
+        if (err) throw err;
+    })
 };
 
 
