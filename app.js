@@ -4,11 +4,14 @@ const Intern = require("./lib/Intern");
 const render = require("./lib/htmlRenderer");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const path = require("path");
+
+const dir = "./output";
 
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-let teamList = [];
+let teamMembers = [];
 const managerQuestions = [
     {
         type: "input",
@@ -84,10 +87,10 @@ const newTeamMember = [
     }
 ];
 
-//creates manager using prompt answers and pushes the answers to the teamList array
+//creates manager using prompt answers and pushes the answers to the teamMembers array
 inquirer.prompt(managerQuestions).then(ans => {
     console.log(ans);
-    teamList.push(new Manager(ans.manager_name, ans.manager_id, ans.manager_email, ans.manager_officeNum));
+    teamMembers.push(new Manager(ans.manager_name, ans.manager_id, ans.manager_email, ans.manager_officeNum));
     nextPrompt();
 });
 
@@ -107,32 +110,33 @@ const nextPrompt = () => {
     });
 };
 
-//creates engineer using prompt answers and pushes the answers to the teamList array
+//creates engineer using prompt answers and pushes the answers to the teamMembers array
 const promptEngineer = () => {
     inquirer.prompt(engineerQuestions).then(ans => {
         console.log(ans);
-        teamList.push(new Engineer(ans.engineer_name, ans.engineer_id, ans.engineer_email, ans.engineer_gitHub));
+        teamMembers.push(new Engineer(ans.engineer_name, ans.engineer_id, ans.engineer_email, ans.engineer_gitHub));
         nextPrompt();
     });
 };
 
-//creates intern using prompt answers and pushes the answers to the teamList array
+//creates intern using prompt answers and pushes the answers to the teamMembers array
 const promptIntern = () => {
     inquirer.prompt(internQuestions).then(ans => {
         console.log(ans);
-        teamList.push(new Intern(ans.intern_name, ans.intern_id, ans.intern_email, ans.intern_school));
+        teamMembers.push(new Intern(ans.intern_name, ans.intern_id, ans.intern_email, ans.intern_school));
         nextPrompt();
     });
 };
 
 //creates the html to display all the team members
 const createHTML = () => {
-    console.log('this is a new html file');
-    console.log(render(teamList));
-    render(teamList);
-    fs.writeFile("index.html", render(teamList), function(err){
-        if(err) throw err;
-    })
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+
+    const outputPath = path.join(__dirname, dir, "team.html");
+
+    fs.writeFile(outputPath, render(teamMembers), "utf-8");
 };
 
 
